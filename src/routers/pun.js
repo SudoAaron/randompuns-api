@@ -98,6 +98,34 @@ router.patch('/puns/:punID/approve', async (req, res) => {
     }
 })
 
+router.patch('/puns/:punID/like', async (req, res) => {
+    try {
+        const pun = await Pun.findOne({ _id: req.params.punID });
+        if(!pun) {
+            return res.status(404).send();
+        }
+        pun.likes = pun.likes + 1;
+        await pun.save();
+        res.send(pun);
+    } catch (e) {
+        res.status(400).send();
+    }
+})
+
+router.patch('/puns/:punID/dislike', async (req, res) => {
+    try {
+        const pun = await Pun.findOne({ _id: req.params.punID });
+        if(!pun) {
+            return res.status(404).send();
+        }
+        pun.dislikes = pun.dislikes + 1;
+        await pun.save();
+        res.send(pun);
+    } catch (e) {
+        res.status(400).send();
+    }
+})
+
 router.patch('/puns/:punID', async (req, res) => {
     const allowedUpdates = ['title', 'setUp', 'punchline', 'submittedBy']
     const updates = Object.keys(req.body);
