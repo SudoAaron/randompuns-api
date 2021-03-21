@@ -42,7 +42,7 @@ router.get('/puns', async (req, res) => {
 });
 
 router.post('/puns/submit/bulk', async (req, res) => {
-    const allowedUpdates = ['title', 'setUp', 'punchline', 'author']
+    const allowedUpdates = ['title', 'setUp', 'punchline', 'submittedBy']
     const bulkArray = req.body.items;
     let error = {
         "message": '',
@@ -68,7 +68,7 @@ router.post('/puns/submit/bulk', async (req, res) => {
 
 router.post('/puns/submit', async (req, res) => {
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['title', 'setUp', 'punchline', 'author']
+    const allowedUpdates = ['title', 'setUp', 'punchline', 'submittedBy']
     const isValidUpdate = updates.every((update) => allowedUpdates.includes(update));
     const pun = new Pun(req.body);
     if (!pun) {
@@ -99,7 +99,7 @@ router.patch('/puns/:punID/approve', async (req, res) => {
 })
 
 router.patch('/puns/:punID', async (req, res) => {
-    const allowedUpdates = ['title', 'setUp', 'punchline', 'author']
+    const allowedUpdates = ['title', 'setUp', 'punchline', 'submittedBy']
     const updates = Object.keys(req.body);
     const isValidUpdate = updates.every((update) => allowedUpdates.includes(update));
     if(!isValidUpdate) {
