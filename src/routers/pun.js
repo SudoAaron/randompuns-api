@@ -1,6 +1,7 @@
 const express = require('express');
 const Pun = require('../models/pun');
 const auth = require('../middleware/auth');
+const hasRole = require('../middleware/hasRole');
 
 const router = new express.Router();
 
@@ -87,6 +88,7 @@ router.post('/puns/submit', async (req, res) => {
 
 router.patch('/puns/:punID/approve', auth, async (req, res) => {
     try {
+        hasRole(req, res, 'admin');
         const pun = await Pun.findById(req.params.punID);
         if (!pun) {
             return res.status(404).send();
@@ -147,7 +149,7 @@ router.patch('/puns/:punID', auth, async (req, res) => {
     }
 })
 
-router.delete('/puns/:punID', () => {auth('admin')}, async (req, res) => {
+router.delete('/puns/:punID', auth, async (req, res) => {
     try {
         const pun = await Pun.deleteOne({ _id: req.params.punID });
         if (!pun) {
