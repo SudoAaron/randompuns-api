@@ -86,9 +86,10 @@ router.post('/puns/submit', async (req, res) => {
     }
 })
 
-router.patch('/puns/:punID/approve', auth, async (req, res) => {
+router.patch('/puns/:punID/approve', (req, res) => {
+    auth(req, res, next, 'admin');
+}, async (req, res) => {
     try {
-        hasRole(req, res, 'admin');
         const pun = await Pun.findById(req.params.punID);
         if (!pun) {
             return res.status(404).send();
@@ -99,7 +100,21 @@ router.patch('/puns/:punID/approve', auth, async (req, res) => {
     } catch (e) {
         res.status(400).send();
     }
-})
+});
+
+// router.patch('/puns/:punID/approve', auth, async (req, res) => {
+//     try {
+//         const pun = await Pun.findById(req.params.punID);
+//         if (!pun) {
+//             return res.status(404).send();
+//         }
+//         pun.approved = true;
+//         await pun.save();
+//         res.send(pun);
+//     } catch (e) {
+//         res.status(400).send();
+//     }
+// })
 
 router.patch('/puns/:punID/like', async (req, res) => {
     try {
