@@ -86,7 +86,7 @@ router.post('/puns/submit', async (req, res) => {
     }
 })
 
-router.patch('/puns/:punID/approve', (req, res) => {
+router.patch('/puns/:punID/approve', (req, res, next) => {
     auth(req, res, next, 'admin');
 }, async (req, res) => {
     try {
