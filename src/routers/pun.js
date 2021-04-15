@@ -88,7 +88,7 @@ router.post('/puns/submit', async (req, res) => {
 
 router.patch('/puns/:punID/approve', auth, async (req, res) => {
     try {
-        hasRole(req, res, 'admin');
+        hasRole(req.user, 'admin');
         const pun = await Pun.findById(req.params.punID);
         if (!pun) {
             return res.status(404).send();
