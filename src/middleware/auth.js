@@ -28,6 +28,8 @@ const auth = async (req, res, next, role) => {
                 throw new Error();
                 // throw new Error('Please authenticate');
             }
+            console.log(user);
+            console.log(role);
             if (!user.roles.includes(role)) {
                 throw new Error();
                 // throw new Error('Insufficient Permissions');
