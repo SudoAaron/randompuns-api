@@ -1,6 +1,5 @@
 const express = require('express');
 const Pun = require('../models/pun');
-const  auth  = require('../middleware/auth');
 const adminAuth = require('../middleware/adminAuth');
 
 const router = new express.Router();
@@ -128,7 +127,7 @@ router.patch('/puns/:punID/dislike', async (req, res) => {
     }
 })
 
-router.patch('/puns/:punID', auth, async (req, res) => {
+router.patch('/puns/:punID', adminAuth, async (req, res) => {
     const allowedUpdates = ['title', 'setUp', 'punchline', 'submittedBy']
     const updates = Object.keys(req.body);
     const isValidUpdate = updates.every((update) => allowedUpdates.includes(update));
@@ -148,7 +147,7 @@ router.patch('/puns/:punID', auth, async (req, res) => {
     }
 })
 
-router.delete('/puns/:punID', auth, async (req, res) => {
+router.delete('/puns/:punID', adminAuth, async (req, res) => {
     try {
         const pun = await Pun.deleteOne({ _id: req.params.punID });
         if (!pun) {
