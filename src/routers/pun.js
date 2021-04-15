@@ -1,6 +1,7 @@
 const express = require('express');
 const Pun = require('../models/pun');
-const auth, { adminAuth } = require('../middleware/auth');
+const auth = require('../middleware/auth');
+const adminAuth = require('../middleware/auth');
 const hasRole = require('../middleware/hasRole');
 
 const router = new express.Router();
