@@ -147,7 +147,7 @@ router.patch('/puns/:punID', auth, async (req, res) => {
     }
 })
 
-router.delete('/puns/:punID', auth, async (req, res) => {
+router.delete('/puns/:punID', () => {auth('admin')}, async (req, res) => {
     try {
         const pun = await Pun.deleteOne({ _id: req.params.punID });
         if (!pun) {

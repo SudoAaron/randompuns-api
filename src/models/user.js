@@ -32,6 +32,11 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    roles: {
+        type: Array,
+        required: true,
+        default: ['user']
+    },
     tokens: [{
         token: {
             type: String,
