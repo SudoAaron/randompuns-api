@@ -161,6 +161,7 @@ router.delete('/puns/:punID', adminAuth, async (req, res) => {
 
 router.patch('/puns/approve/bulk', adminAuth, async (req, res) => {
     const allowedUpdates = ['approved']
+    console.log(req.body);
     const bulkArray = req.body.items;
     let error = {
         "message": '',
