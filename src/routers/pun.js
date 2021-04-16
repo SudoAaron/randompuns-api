@@ -159,4 +159,35 @@ router.delete('/puns/:punID', adminAuth, async (req, res) => {
     }
 })
 
+router.post('/puns/approve/bulk', adminAuth, async (req, res) => {
+    const allowedUpdates = ['approved']
+    const bulkArray = req.body.items;
+    let error = {
+        "message": '',
+        "items": []
+    };
+    await bulkArray.map(async (item) => {
+        const updates = Object.keys(item);
+        const isValidUpdate = updates.every((update) => allowedUpdates.includes(update));
+
+        const pun = await Pun.findById(item);
+        if (!pun) {
+            return res.status(404).send();
+        }
+        pun.approved = true;
+
+        if(isValidUpdate) {
+            await pun.save();
+        } else {
+            error.message = 'Invalid items sent.'
+            error.items.push(item);
+        }
+    })
+    try {
+        res.status(201).send({"completed": true, error});
+    } catch (e) {
+        res.status(400).send({"completed": false, error});
+    }
+})
+
   module.exports = router;
