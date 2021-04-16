@@ -4,6 +4,18 @@ const User = require('../models/user');
 const auth = require('../middleware/auth');
 const adminAuth = require('../middleware/adminAuth');
 
+router.get('/users', adminAuth, async (req, res) => {
+try{
+    const users = await User.find({});
+    if (!users) {
+        return res.status(404).send();
+    }
+    res.send(users);
+} catch (e) {
+    res.status(400).send();
+}
+});
+
 router.post('/users', async (req, res) => {
     const user = new User(req.body);
     try {
