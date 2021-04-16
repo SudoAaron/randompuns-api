@@ -33,9 +33,9 @@ const userSchema = new mongoose.Schema({
         }
     },
     roles: {
-        type: Array,
+        type: String,
         required: true,
-        default: ['user']
+        default: 'user'
     },
     tokens: [{
         token: {
