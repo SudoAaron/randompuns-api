@@ -160,34 +160,31 @@ router.delete('/puns/:punID', adminAuth, async (req, res) => {
 })
 
 router.patch('/puns/approve/bulk', adminAuth, async (req, res) => {
-    const allowedUpdates = ['approved']
     const bulkArray = req.body.items;
-    let error = {
-        "message": '',
-        "items": []
-    };
+
     await bulkArray.map(async (item) => {
-        const updates = Object.keys(item);
-        const isValidUpdate = updates.every((update) => allowedUpdates.includes(update));
-
-        const pun = await Pun.findById(item);
-        if (!pun) {
-            return res.status(404).send();
-        }
+        let pun = await Pun.findById(item);
         pun.approved = true;
-
-        if(isValidUpdate) {
-            await pun.save();
-        } else {
-            error.message = 'Invalid items sent.'
-            error.items.push(item);
-        }
+        await pun.save();
     })
     try {
-        res.status(201).send({"completed": true, error});
+        res.status(201).send({ "completed": true });
     } catch (e) {
-        res.status(400).send({"completed": false, error});
+        res.status(400).send({ "completed": false });
     }
-})
+});
+
+router.delete('/puns/delete/bulk', adminAuth, async (req, res) => {
+    const bulkArray = req.body.items;
+
+    await bulkArray.map(async (item) => {
+        await Pun.deleteOne({ _id: item });
+    })
+    try {
+        res.status(201).send({ "completed": true });
+    } catch (e) {
+        res.status(400).send({ "completed": false });
+    }
+});
 
   module.exports = router;
