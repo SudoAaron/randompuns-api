@@ -101,7 +101,7 @@ router.delete('/user/:id', adminAuth, async (req, res) => {
 
 router.patch('/user/:id', adminAuth, async (req, res) => {
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['name','email','password'];
+    const allowedUpdates = ['name','email','roles'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
     if(!isValidOperation) {
         return res.status(400).send({ error: 'Invalid update.'});
@@ -112,7 +112,7 @@ router.patch('/user/:id', adminAuth, async (req, res) => {
             return res.status(404).send();
         }
         updates.forEach((update) => user[update] = req.body[update]);
-        await req.user.save();
+        await user.save();
         res.send(user);
     } catch (e) {
         res.status(400).send();
