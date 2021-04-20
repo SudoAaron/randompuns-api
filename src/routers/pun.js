@@ -32,20 +32,19 @@ try{
 
 router.get('/puns', async (req, res) => {
     try{
-        const puns = await Pun.find({});
-        if (!puns) {
-            return res.status(404).send();
-        }
         for (const key in req.query) {
             switch(key) {
                 case 'title':
-                    puns.find({ title: req.query[key] })
+                    const puns = await Pun.find({ title: req.query[key] })
                 case 'submittedBy':
-                    puns.find({ submittedBy: req.query[key] })
-                case 'status':
-                    puns.find({ approved: req.query[key] })
+                    const puns = Pun.find({ submittedBy: req.query[key] })
+                case 'approved':
+                    const puns = await Pun.find({ approved: req.query[key] })
                 default:
-                    return null;
+                    const puns = await Pun.find({});
+            }
+            if (!puns) {
+                return res.status(404).send();
             }
         }
         res.send(puns);
