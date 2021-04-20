@@ -36,6 +36,18 @@ router.get('/puns', async (req, res) => {
         if (!puns) {
             return res.status(404).send();
         }
+        for (const key in req.query) {
+            switch(key) {
+                case 'title':
+                    puns.find({ title: req.query[key] })
+                case 'submittedBy':
+                    puns.find({ submittedBy: req.query[key] })
+                case 'status':
+                    puns.find({ approved: req.query[key] })
+                default:
+                    return null;
+            }
+        }
         res.send(puns);
     } catch (e) {
         res.status(400).send();
